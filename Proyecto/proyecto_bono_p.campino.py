@@ -1,7 +1,5 @@
 """
-Paola Andrea Campiño
 
-Daniel Alfonso Garcia Pilimur
 
 
 Avance: Por ahora solo minimiza el número de paradas
