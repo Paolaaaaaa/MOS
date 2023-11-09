@@ -15,17 +15,22 @@ import matplotlib.pyplot as plt
 
 Model = ConcreteModel()
 
-inicial = 1
-final =6
-ruta = 5
-estaciones =13
+inicial = 3
+final =5
+ruta = 6
 
+costoViaje_max =7
+estaciones =13
+alpha= 0.2
+beta=0.7
+epsilon=0.1
 N= RangeSet(1,estaciones)
 R= RangeSet(1,ruta)
 
 
 Model.routes = Param(N, N,R,mutable=True)
 
+Model.costo = Param(N, N,R,mutable=True)
 
 for i in N:
     for j in N:
@@ -33,7 +38,19 @@ for i in N:
             Model.routes[i,j,k]=9999
 
 
+for i in N:
+    for j in N:
+        for k in R:
+            Model.costo[i,j,k]=0
 
+
+data_cost={
+      
+      (3,4,1):3,
+      (11,12,1):3,
+      
+            
+}
 
 
 data={
@@ -42,20 +59,27 @@ data={
       (4,5,2):1,(5,6,2):1,
       (1,13,3):1,(13,12,3):1,(12,11,3):1,
       (6,7,4):1,(7,8,4):1,(8,9,4):1,(6,7,4):1,(8,9,4):1,(9,10,4):1,(10,11,4):1,
-      (6,7,5):1,(7,10,5):1,(10,11,5):1
+      (6,7,5):1,(7,10,5):1,(10,11,5):1,
+      (3,4,6):1,(4,5,6):1
             
 }
 
 
 for key, value in data.items():
     Model.routes[key].set_value(value)
+
+for key, value in data_cost.items():
+     Model.costo[key].set_value(value)
 # VARIABLES****************************************************************************
 
 Model.x = Var(N,N,R, domain=Binary)
+Model.y = Var(R, domain=Binary)
 
 # OBJECTIVE FUNCTION*******************************************************************
-
-Model.obj = Objective(expr = sum(Model.x[i,j,k] * Model.routes[i,j,k] for i in N for j in N for k in R) )
+#
+Model.obj = Objective(expr = alpha * sum(Model.x[i,j,k] * Model.routes[i,j,k] for i in N for j in N for k in R) 
+                      + beta*sum (Model.y[k]  for k in R)
+                      + epsilon *(3+sum(Model.x[i,j,k]* Model.routes[i,j,k] * Model.costo[i,j,k] for i in N for j in N for k in R)))
 # CONSTRAINTS**************************************************************************
 #La suma de todos los nodos iniciales debe ser igual a 1
 def restriccion1(Model, i ):
@@ -76,10 +100,26 @@ Model.res2=Constraint(N, rule=restriccion2)
 
 def restriccion3(Model, i ):
     if i !=final and i !=inicial:
-        return sum(Model.x[i,j,k] for j in N for k in R) == sum(Model.x[j,i, k] for j in N for k in R)
+        return sum(Model.x[i,j,k] for j in N for k in R)== sum(Model.x[j,i, k] for j in N for k in R)
     else:
         return Constraint.Skip
+
 Model.res3=Constraint(N, rule=restriccion3)
+
+
+
+def restriccion4(Model, i,j,k ):
+   return Model.y[k] >=(Model.x[i,j, k] * Model.routes[i,j,k] )
+Model.res4=Constraint(N,N,R, rule=restriccion4)
+
+# Costo maximo del viaje
+def restriccion5(Model, i ):
+   return sum(Model.x[i,j,k] * Model.costo[i,j,k] for i in N for j in N for k in R)+3<=costoViaje_max
+Model.res5=Constraint(R, rule=restriccion5)
+
+
+
+
 
 #Solve
 SolverFactory('glpk').solve(Model)
@@ -157,5 +197,12 @@ for i in N:
 
 ax_1.set_xlabel('x')
 ax_1.set_ylabel('y')
-ax_1.set_title(" Grafica:  y vs x")
+
+
+
+
+costo_viaje = (3+sum(Model.x[i,j,k].value* Model.routes[i,j,k].value * Model.costo[i,j,k].value for i in N for j in N for k in R))
+print(costo_viaje)
+titulo =" Grafica:  y vs x. Costo total: "+str(costo_viaje+3)
+ax_1.set_title(titulo)
 plt.show()
