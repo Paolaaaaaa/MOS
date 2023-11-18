@@ -1,0 +1,22 @@
+B 3 C o m p i l a t i o n
+B 94 Equation Listing    SOLVE model2 Using MIP From line 86
+D 97 funcionObjetivo
+D 102 restriccion1_equ5
+D 107 minJugadorsRol
+D 118 promedio_min
+D 129 j2_o_j3
+B 135 Column Listing      SOLVE model2 Using MIP From line 86
+E 138 x
+E 191 z
+B 199 Range Statistics    SOLVE model2 Using MIP From line 86
+B 210 Model Statistics    SOLVE model2 Using MIP From line 86
+B 223 Solution Report     SOLVE model2 Using MIP From line 86
+F 268 funcionObjetivo
+F 269 restriccion1_equ5
+F 274 minJugadorsRol
+F 286 promedio_min
+F 300 j2_o_j3
+G 304 x
+G 318 z
+B 328 E x e c u t i o n
+I 328 x

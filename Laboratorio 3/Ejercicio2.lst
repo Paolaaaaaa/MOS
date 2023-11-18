@@ -1,0 +1,259 @@
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/31/23 09:54:02 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+      solo:
+       
+      Paola Andra campiño p.campino
+       
+       
+   8   
+   9   
+  10  sets
+  11   
+  12  p /p1*p6/
+  13  a /a1*a6/
+  14   
+  15   
+  16  ;
+  17   
+  18  Scalar cobertura /1/;
+  19   
+  20   
+  21   
+  22   
+  23   
+  24  Table publo_t(a,p) link post
+  25          p1  p2  p3  p4  p5  p6
+  26  a1      0   10  20  30  30  20
+  27  a2      10  0   25  35  20  10
+  28  a3      20  25  0   15  30  20
+  29  a4      30  35  15  0   15  25
+  30  a5      30  20  30  15   0  14
+  31  a6      20  10  20  25  14  0;
+  32   
+  33   
+  34  Parameter  tiempos_validos(a,p);
+  35   
+  36   
+  37   
+  38  loop((a,p),
+  39      if(publo_t(a,p) <= 15,
+  40      tiempos_validos(a,p) = 1;
+  41  else
+  42      tiempos_validos(a,p) = 0;
+  43  );
+  44   
+  45   
+  46  );
+  47   
+  48   
+  49   
+  50   
+  51   
+  52  Variables
+  53  x(a)
+  54  z funcion objetivo;
+  55   
+  56   
+  57  Binary Variable x;
+  58  Equations
+  59  funcionObjetivo
+  60  retriccion1 minima cobertura por zona =1
+  61  ;
+  62   
+  63  funcionObjetivo ..  z =e= sum(a,x(a));
+  64  retriccion1(p) ..   cobertura=l=sum((a),x(a)*tiempos_validos(a,p));
+  65   
+  66  Model model2 /all/ ;
+  67   
+  68  option mip=CPLEX;
+  69  Solve model2 using mip minimizing z;
+  70   
+  71   
+  72  Display x.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/31/23 09:54:02 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model2 Using MIP From line 69
+
+
+---- funcionObjetivo  =E=  
+
+funcionObjetivo..  - x(a1) - x(a2) - x(a3) - x(a4) - x(a5) - x(a6) + z =E= 0 ; (LHS = 0)
+     
+
+---- retriccion1  =L=  minima cobertura por zona =1
+
+retriccion1(p1)..  - x(a1) - x(a2) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+retriccion1(p2)..  - x(a1) - x(a2) - x(a6) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+retriccion1(p3)..  - x(a3) - x(a4) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 3 ENTRIES SKIPPED
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/31/23 09:54:02 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model2 Using MIP From line 69
+
+
+---- x  
+
+x(a1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcionObjetivo
+       -1       retriccion1(p1)
+       -1       retriccion1(p2)
+
+x(a2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcionObjetivo
+       -1       retriccion1(p1)
+       -1       retriccion1(p2)
+       -1       retriccion1(p6)
+
+x(a3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcionObjetivo
+       -1       retriccion1(p3)
+       -1       retriccion1(p4)
+
+REMAINING 3 ENTRIES SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcionObjetivo
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/31/23 09:54:02 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE model2 Using MIP From line 69
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.000E+00]
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/31/23 09:54:02 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model2 Using MIP From line 69
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            7
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            7
+NON ZERO ELEMENTS            23     DISCRETE VARIABLES          6
+
+
+GENERATION TIME      =        0.015 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/31/23 09:54:02 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model2 Using MIP From line 69
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model2              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  69
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE                2.0000
+
+ RESOURCE USAGE, LIMIT          0.016 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.02sec (det. 0.01 ticks)
+
+--- Returning a primal only solution to GAMS (marginals all set to NA).
+--- Fixing integer variables and solving final LP...
+
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+
+Proven optimal solution
+MIP Solution:            2.000000    (0 iterations, 0 nodes)
+Final Solve:             2.000000    (0 iterations)
+
+Best possible:           2.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcionOb~          .              .              .             1.0000      
+
+---- EQU retriccion1  minima cobertura por zona =1
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+p1        -INF           -1.0000        -1.0000          .          
+p2        -INF           -1.0000        -1.0000          .          
+p3        -INF           -1.0000        -1.0000          .          
+p4        -INF           -1.0000        -1.0000          .          
+p5        -INF           -1.0000        -1.0000          .          
+p6        -INF           -1.0000        -1.0000          .          
+
+---- VAR x  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+a1          .              .             1.0000         1.0000      
+a2          .             1.0000         1.0000         1.0000      
+a3          .              .             1.0000         1.0000      
+a4          .             1.0000         1.0000         1.0000      
+a5          .              .             1.0000         1.0000      
+a6          .              .             1.0000         1.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF            2.0000        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/31/23 09:54:02 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     72 VARIABLE x.L  
+
+a2 1.000,    a4 1.000
+
+
+
+EXECUTION TIME       =        0.312 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+
+
+USER: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL096105
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio2.gms
+Output     C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio2.lst

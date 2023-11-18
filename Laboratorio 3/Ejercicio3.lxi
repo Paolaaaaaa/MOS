@@ -1,0 +1,28 @@
+B 3 C o m p i l a t i o n
+B 96 Equation Listing    SOLVE model3 Using MIP From line 78
+D 99 funcionObjetivo
+D 106 limite_tempo_min
+D 113 limite_tempo_max
+D 120 c_una_cado_lado
+D 131 req_blues
+D 138 req_rock_a
+D 143 cancion1_a
+D 148 cancion2_4
+B 154 Column Listing      SOLVE model3 Using MIP From line 78
+E 157 x
+E 187 z
+B 196 Range Statistics    SOLVE model3 Using MIP From line 78
+B 207 Model Statistics    SOLVE model3 Using MIP From line 78
+B 220 Solution Report     SOLVE model3 Using MIP From line 78
+F 263 funcionObjetivo
+F 270 limite_tempo_min
+F 277 limite_tempo_max
+F 284 c_una_cado_lado
+F 297 req_blues
+F 306 req_rock_a
+F 307 cancion1_a
+F 308 cancion2_4
+G 314 x
+G 337 z
+B 347 E x e c u t i o n
+I 347 x

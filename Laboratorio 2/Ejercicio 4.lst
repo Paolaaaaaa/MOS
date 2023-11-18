@@ -1,0 +1,358 @@
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/23/23 21:32:01 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  sets
+   2   
+   3  c coordenas /c1*c2/
+   4  n zonas /n1*n7/
+   5  alias(i,n);
+   6   
+   7   
+   8  ;
+   9   
+  10  Scalar nodo_inic /4/;
+  11   
+  12  Scalar nodo_fin /6/;
+  13   
+  14   
+       
+      Paola Andra Campiño p.campino
+       
+       
+  21   
+  22  table nodos(n,c) link cost
+  23          c1  c2
+  24  n1      20  6
+  25  n2      22  1
+  26  n3      9   2
+  27  n4      3   25
+  28  n5      21  10
+  29  n6      29  2
+  30  n7      14  12
+  31   
+  32  ;
+  33   
+  34  Parameter  distancia(n,i);
+  35  Parameter  costos(n,i);
+  36   
+  37   
+  38  loop((n,i),
+  39      distancia(n,i) = sqrt(sqr(nodos(n,'c1')-nodos(i,'c1')) + sqr(nodos(n,'c2')-nodos(i,'c2')));
+  40   
+  41  );
+  42   
+       
+      Calculo de distancias
+  47   
+  48  loop((n,i),
+  49      if(distancia(n,i) <= 20,
+  50      costos(n,i) = distancia(n,i);
+  51  else
+  52      costos(n,i) = 9999;
+  53   
+  54   
+  55  );
+  56   
+  57   
+  58  );
+  59   
+  60   
+      Si la distancia es menor a 20 se agrega en la matriz de costos, en caso contrario se pone un valor muy alto
+      para representar que no hay camino. Como no hay cambino a si mismas el valor entre el mismo nodo también es igual a 9999.
+  65  costos(n,n) = 9999;
+  66   
+  67  Variables
+  68  x(n,i)
+  69  z funcion objetivo;
+  70   
+  71   
+  72   
+  73  Binary Variable x;
+  74  Equations
+  75  funcionObjetivo funcion objetivo
+  76  sourceNode(n)            source node
+  77  destinationNode(i)       destination node
+  78  intermediateNode         intermediate node;
+  79  funcionObjetivo ..  z =e= sum((n,i),costos(n,i)*x(n,i));
+  80   
+  81   
+  82  sourceNode(n)$(ord(n) = nodo_inic)                 ..  sum((i), x(n,i)) =e= 1;
+  83   
+  84  destinationNode(i)$(ord(i) = nodo_fin)                    ..  sum((n), x(n,i)) =e= 1;
+  85   
+  86  intermediateNode(n)$(ord(n) <> nodo_inic and ord(n) ne nodo_fin)  ..  sum((i), x(n,i)) - sum((i), x(i,n)) =e= 0;
+  87   
+  88   
+      Mismas restricciones de camino de costo minimo y minimizar el costo de nodo 4 a nodo 6.
+  92   
+  93  Model model4 /all/ ;
+  94   
+  95  option mip=CPLEX;
+  96  Solve model4 using mip minimicing z;
+  97  Display x.l;
+  98  Display costos;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/23/23 21:32:01 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model4 Using MIP From line 96
+
+
+---- funcionObjetivo  =E=  funcion objetivo
+
+funcionObjetivo..  - 9999*x(n1,n1) - 5.3851648071345*x(n1,n2) - 11.7046999107196*x(n1,n3) - 9999*x(n1,n4) - 4.12310562561766*x(n1,n5) - 9.8488578017961*x(n1,n6) - 8.48528137423857*x(n1,n7) - 5.3851648071345*x(n2,n1) - 9999*x(n2,n2) - 13.0384048104053*x(n2,n3) - 9999*x(n2,n4) - 9.05538513813742*x(n2,n5) - 7.07106781186548*x(n2,n6) - 13.6014705087354*x(n2,n7) - 11.7046999107196*x(n3,n1) - 13.0384048104053*x(n3,n2) - 9999*x(n3,n3) - 9999*x(n3,n4) - 14.422205101856*x(n3,n5) - 20*x(n3,n6) - 11.1803398874989*x(n3,n7) - 9999*x(n4,n1) - 9999*x(n4,n2) - 9999*x(n4,n3) - 9999*x(n4,n4) - 9999*x(n4,n5) - 9999*x(n4,n6) - 17.0293863659264*x(n4,n7) - 4.12310562561766*x(n5,n1) - 9.05538513813742*x(n5,n2) - 14.422205101856*x(n5,n3) - 9999*x(n5,n4) - 9999*x(n5,n5) - 11.3137084989848*x(n5,n6) - 7.28010988928052*x(n5,n7) - 9.8488578017961*x(n6,n1) - 7.07106781186548*x(n6,n2) - 20*x(n6,n3) - 9999*x(n6,n4) - 11.3137084989848*x(n6,n5) - 9999*x(n6,n6) - 18.0277563773199*x(n6,n7) - 8.48528137423857*x(n7,n1) - 13.6014705087354*x(n7,n2) - 11.1803398874989*x(n7,n3) - 17.0293863659264*x(n7,n4) - 7.28010988928052*x(n7,n5) - 18.0277563773199*x(n7,n6) - 9999*x(n7,n7) + z =E= 0 ; (LHS = 0)
+     
+
+---- sourceNode  =E=  source node
+
+sourceNode(n4)..  x(n4,n1) + x(n4,n2) + x(n4,n3) + x(n4,n4) + x(n4,n5) + x(n4,n6) + x(n4,n7) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- destinationNode  =E=  destination node
+
+destinationNode(n6)..  x(n1,n6) + x(n2,n6) + x(n3,n6) + x(n4,n6) + x(n5,n6) + x(n6,n6) + x(n7,n6) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- intermediateNode  =E=  intermediate node
+
+intermediateNode(n1)..  x(n1,n2) + x(n1,n3) + x(n1,n4) + x(n1,n5) + x(n1,n6) + x(n1,n7) - x(n2,n1) - x(n3,n1) - x(n4,n1) - x(n5,n1) - x(n6,n1) - x(n7,n1) =E= 0 ; (LHS = 0)
+     
+intermediateNode(n2)..  - x(n1,n2) + x(n2,n1) + x(n2,n3) + x(n2,n4) + x(n2,n5) + x(n2,n6) + x(n2,n7) - x(n3,n2) - x(n4,n2) - x(n5,n2) - x(n6,n2) - x(n7,n2) =E= 0 ; (LHS = 0)
+     
+intermediateNode(n3)..  - x(n1,n3) - x(n2,n3) + x(n3,n1) + x(n3,n2) + x(n3,n4) + x(n3,n5) + x(n3,n6) + x(n3,n7) - x(n4,n3) - x(n5,n3) - x(n6,n3) - x(n7,n3) =E= 0 ; (LHS = 0)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/23/23 21:32:01 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model4 Using MIP From line 96
+
+
+---- x  
+
+x(n1,n1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    -9999       funcionObjetivo
+
+x(n1,n2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -5.3852  funcionObjetivo
+        1       intermediateNode(n1)
+       -1       intermediateNode(n2)
+
+x(n1,n3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+      -11.7047  funcionObjetivo
+        1       intermediateNode(n1)
+       -1       intermediateNode(n3)
+
+REMAINING 46 ENTRIES SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcionObjetivo
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/23/23 21:32:01 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE model4 Using MIP From line 96
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 9.999E+03]
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/23/23 21:32:01 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model4 Using MIP From line 96
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           50
+NON ZERO ELEMENTS           124     DISCRETE VARIABLES         49
+
+
+GENERATION TIME      =        0.141 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/23/23 21:32:01 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model4 Using MIP From line 96
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model4              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  96
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE               35.0571
+
+ RESOURCE USAGE, LIMIT          0.250 10000000000.000
+ ITERATION COUNT, LIMIT         5    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.25sec (det. 0.33 ticks)
+
+--- Returning a primal only solution to GAMS (marginals all set to NA).
+--- Fixing integer variables and solving final LP...
+
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Proven optimal solution
+MIP Solution:           35.057143    (5 iterations, 0 nodes)
+Final Solve:            35.057143    (0 iterations)
+
+Best possible:          35.057143
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcionOb~          .              .              .             1.0000      
+
+  funcionObjetivo  funcion objetivo
+
+---- EQU sourceNode  source node
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+n4         1.0000         1.0000         1.0000          .          
+
+---- EQU destinationNode  destination node
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+n6         1.0000         1.0000         1.0000          .          
+
+---- EQU intermediateNode  intermediate node
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+n1          .              .              .              .          
+n2          .              .              .              .          
+n3          .              .              .              .          
+n5          .              .              .              .          
+n7          .              .              .              .          
+
+---- VAR x  
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+n1.n1          .              .             1.0000      9999.0000      
+n1.n2          .              .             1.0000         5.3852      
+n1.n3          .              .             1.0000        11.7047      
+n1.n4          .              .             1.0000      9999.0000      
+n1.n5          .              .             1.0000         4.1231      
+n1.n6          .              .             1.0000         9.8489      
+n1.n7          .              .             1.0000         8.4853      
+n2.n1          .              .             1.0000         5.3852      
+n2.n2          .              .             1.0000      9999.0000      
+n2.n3          .              .             1.0000        13.0384      
+n2.n4          .              .             1.0000      9999.0000      
+n2.n5          .              .             1.0000         9.0554      
+n2.n6          .              .             1.0000         7.0711      
+n2.n7          .              .             1.0000        13.6015      
+n3.n1          .              .             1.0000        11.7047      
+n3.n2          .              .             1.0000        13.0384      
+n3.n3          .              .             1.0000      9999.0000      
+n3.n4          .              .             1.0000      9999.0000      
+n3.n5          .              .             1.0000        14.4222      
+n3.n6          .              .             1.0000        20.0000      
+n3.n7          .              .             1.0000        11.1803      
+n4.n1          .              .             1.0000      9999.0000      
+n4.n2          .              .             1.0000      9999.0000      
+n4.n3          .              .             1.0000      9999.0000      
+n4.n4          .              .             1.0000      9999.0000      
+n4.n5          .              .             1.0000      9999.0000      
+n4.n6          .              .             1.0000      9999.0000      
+n4.n7          .             1.0000         1.0000        17.0294      
+n5.n1          .              .             1.0000         4.1231      
+n5.n2          .              .             1.0000         9.0554      
+n5.n3          .              .             1.0000        14.4222      
+n5.n4          .              .             1.0000      9999.0000      
+n5.n5          .              .             1.0000      9999.0000      
+n5.n6          .              .             1.0000        11.3137      
+n5.n7          .              .             1.0000         7.2801      
+n6.n1          .              .             1.0000         9.8489      
+n6.n2          .              .             1.0000         7.0711      
+n6.n3          .              .             1.0000        20.0000      
+n6.n4          .              .             1.0000      9999.0000      
+n6.n5          .              .             1.0000        11.3137      
+n6.n6          .              .             1.0000      9999.0000      
+n6.n7          .              .             1.0000        18.0278      
+n7.n1          .              .             1.0000         8.4853      
+n7.n2          .              .             1.0000        13.6015      
+n7.n3          .              .             1.0000        11.1803      
+n7.n4          .              .             1.0000        17.0294      
+n7.n5          .              .             1.0000         7.2801      
+n7.n6          .             1.0000         1.0000        18.0278      
+n7.n7          .              .             1.0000      9999.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF           35.0571        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/23/23 21:32:01 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     97 VARIABLE x.L  
+
+            n6          n7
+
+n4                   1.000
+n7       1.000
+
+
+----     98 PARAMETER costos  
+
+            n1          n2          n3          n4          n5          n6          n7
+
+n1    9999.000       5.385      11.705    9999.000       4.123       9.849       8.485
+n2       5.385    9999.000      13.038    9999.000       9.055       7.071      13.601
+n3      11.705      13.038    9999.000    9999.000      14.422      20.000      11.180
+n4    9999.000    9999.000    9999.000    9999.000    9999.000    9999.000      17.029
+n5       4.123       9.055      14.422    9999.000    9999.000      11.314       7.280
+n6       9.849       7.071      20.000    9999.000      11.314    9999.000      18.028
+n7       8.485      13.601      11.180      17.029       7.280      18.028    9999.000
+
+
+
+EXECUTION TIME       =        1.375 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+
+
+USER: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL096105
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\El supremo\Documents\MOS\Laboratorio 2\Ejercicio 4.gms
+Output     C:\Users\El supremo\Documents\MOS\Laboratorio 2\Ejercicio 4.lst

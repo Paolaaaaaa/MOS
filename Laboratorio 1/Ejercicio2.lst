@@ -1,0 +1,255 @@
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:51 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+       
+      - Paola Andrea Campiño p.campino
+      - Daniel Alfonso Pilimur da.garciap1
+       
+       
+   8  sets
+   9  i empleados /e1*e4/
+  10  j horas de trabajo /t1*t4/;
+  11   
+  12   
+  13  Table datos(i,j) link cost
+  14   
+  15          t1  t2  t3  t4
+  16  e1      14  5   8   7
+  17  e2      2   12  6   5
+  18  e3      7   8   3   9
+  19  e4      2   4   6   10;
+  20   
+  21   
+  22  Variables
+  23  x(i,j)
+  24  z funcion objetivo;
+  25   
+  26  Binary Variable x;
+  27  Equations
+  28  funcionObjetivo funcion objetivo
+  29  todosTrabajan(i)
+  30  proy1Trabajador
+  31  ;
+  32   
+  33  funcionObjetivo ..  z =e= sum((j),sum((i), datos(i,j)*x(i,j)));
+  34  todosTrabajan(i) ..  sum(j, x(i,j) ) =e= 1;
+  35  proy1Trabajador(j) .. sum(i,x(i,j)) =e= 1;
+  36   
+  37   
+  38  Model model2 /all/ ;
+  39   
+  40  option mip=CPLEX;
+  41  Solve model2 using mip minimizing z;
+  42  Display z.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:51 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model2 Using MIP From line 41
+
+
+---- funcionObjetivo  =E=  funcion objetivo
+
+funcionObjetivo..  - 14*x(e1,t1) - 5*x(e1,t2) - 8*x(e1,t3) - 7*x(e1,t4) - 2*x(e2,t1) - 12*x(e2,t2) - 6*x(e2,t3) - 5*x(e2,t4) - 7*x(e3,t1) - 8*x(e3,t2) - 3*x(e3,t3) - 9*x(e3,t4) - 2*x(e4,t1) - 4*x(e4,t2) - 6*x(e4,t3) - 10*x(e4,t4) + z =E= 0 ; (LHS = 0)
+     
+
+---- todosTrabajan  =E=  
+
+todosTrabajan(e1)..  x(e1,t1) + x(e1,t2) + x(e1,t3) + x(e1,t4) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+todosTrabajan(e2)..  x(e2,t1) + x(e2,t2) + x(e2,t3) + x(e2,t4) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+todosTrabajan(e3)..  x(e3,t1) + x(e3,t2) + x(e3,t3) + x(e3,t4) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING ENTRY SKIPPED
+
+
+---- proy1Trabajador  =E=  
+
+proy1Trabajador(t1)..  x(e1,t1) + x(e2,t1) + x(e3,t1) + x(e4,t1) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+proy1Trabajador(t2)..  x(e1,t2) + x(e2,t2) + x(e3,t2) + x(e4,t2) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+proy1Trabajador(t3)..  x(e1,t3) + x(e2,t3) + x(e3,t3) + x(e4,t3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING ENTRY SKIPPED
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:51 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model2 Using MIP From line 41
+
+
+---- x  
+
+x(e1,t1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+      -14       funcionObjetivo
+        1       todosTrabajan(e1)
+        1       proy1Trabajador(t1)
+
+x(e1,t2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -5       funcionObjetivo
+        1       todosTrabajan(e1)
+        1       proy1Trabajador(t2)
+
+x(e1,t3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -8       funcionObjetivo
+        1       todosTrabajan(e1)
+        1       proy1Trabajador(t3)
+
+REMAINING 13 ENTRIES SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcionObjetivo
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:51 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE model2 Using MIP From line 41
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.400E+01]
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:51 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model2 Using MIP From line 41
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            9
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           17
+NON ZERO ELEMENTS            49     DISCRETE VARIABLES         16
+
+
+GENERATION TIME      =        0.015 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:51 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model2 Using MIP From line 41
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model2              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  41
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE               15.0000
+
+ RESOURCE USAGE, LIMIT          0.015 10000000000.000
+ ITERATION COUNT, LIMIT         3    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.01sec (det. 0.10 ticks)
+
+--- Returning a primal only solution to GAMS (marginals all set to NA).
+--- Fixing integer variables and solving final LP...
+
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Proven optimal solution
+MIP Solution:           15.000000    (3 iterations, 0 nodes)
+Final Solve:            15.000000    (0 iterations)
+
+Best possible:          15.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcionOb~          .              .              .             1.0000      
+
+  funcionObjetivo  funcion objetivo
+
+---- EQU todosTrabajan  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+e1         1.0000         1.0000         1.0000          .          
+e2         1.0000         1.0000         1.0000          .          
+e3         1.0000         1.0000         1.0000          .          
+e4         1.0000         1.0000         1.0000          .          
+
+---- EQU proy1Trabajador  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+t1         1.0000         1.0000         1.0000          .          
+t2         1.0000         1.0000         1.0000          .          
+t3         1.0000         1.0000         1.0000          .          
+t4         1.0000         1.0000         1.0000          .          
+
+---- VAR x  
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+e1.t1          .              .             1.0000        14.0000      
+e1.t2          .             1.0000         1.0000         5.0000      
+e1.t3          .              .             1.0000         8.0000      
+e1.t4          .              .             1.0000         7.0000      
+e2.t1          .              .             1.0000         2.0000      
+e2.t2          .              .             1.0000        12.0000      
+e2.t3          .              .             1.0000         6.0000      
+e2.t4          .             1.0000         1.0000         5.0000      
+e3.t1          .              .             1.0000         7.0000      
+e3.t2          .              .             1.0000         8.0000      
+e3.t3          .             1.0000         1.0000         3.0000      
+e3.t4          .              .             1.0000         9.0000      
+e4.t1          .             1.0000         1.0000         2.0000      
+e4.t2          .              .             1.0000         4.0000      
+e4.t3          .              .             1.0000         6.0000      
+e4.t4          .              .             1.0000        10.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF           15.0000        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:51 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     42 VARIABLE z.L                   =       15.000  funcion objetivo
+
+
+EXECUTION TIME       =        0.140 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+
+
+USER: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL096105
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\El supremo\Documents\MOS\Laboratorio 1\Ejercicio2.gms
+Output     C:\Users\El supremo\Documents\MOS\Laboratorio 1\Ejercicio2.lst

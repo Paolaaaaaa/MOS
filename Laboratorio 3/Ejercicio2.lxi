@@ -1,0 +1,16 @@
+B 3 C o m p i l a t i o n
+B 81 Equation Listing    SOLVE model2 Using MIP From line 69
+D 84 funcionObjetivo
+D 89 retriccion1
+B 101 Column Listing      SOLVE model2 Using MIP From line 69
+E 104 x
+E 127 z
+B 135 Range Statistics    SOLVE model2 Using MIP From line 69
+B 146 Model Statistics    SOLVE model2 Using MIP From line 69
+B 159 Solution Report     SOLVE model2 Using MIP From line 69
+F 204 funcionObjetivo
+F 206 retriccion1
+G 217 x
+G 230 z
+B 240 E x e c u t i o n
+I 240 x

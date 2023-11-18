@@ -1,0 +1,369 @@
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/12/23 13:12:05 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+       
+      solo:
+       
+      Paola Andra campiño p.campino
+       
+       
+   9   
+  10   
+  11  sets
+  12   
+  13  l lado /l1*l2/
+  14  c canción /c1*c8/
+  15  p propiedades /p1*p4/
+  16  ;
+  17  Scalar tiempo_min /14/;
+  18  Scalar tiempo_max /16/;
+  19  Scalar blues_count /2/;
+  20  Scalar min_rr_a  /3/;
+  21   
+  22   
+  23   
+  24   
+  25   
+  26  Table canciones (c,p) link cost
+  27      p1  p2  p3  p4
+  28  c1  4   1   0   0
+  29  c2  5   0   1   0
+  30  c3  3   1   0   0
+  31  c4  2   0   1   0
+  32  c5  4   1   0   0
+  33  c6  3   0   1   0
+  34  c7  5   0   0   1
+  35  c8  4   1   1   0;
+  36   
+  37   
+       
+      p1 minutos
+       
+       
+      p2= 1 blues rock
+      p3 = 2 rock and roll
+      p4 = 3 sin genero
+       
+  48   
+  49   
+  50   
+  51  Variables
+  52  x(l,c)
+  53  z funcion objetivo;
+  54  Binary Variable x;
+  55  Equations
+  56  funcionObjetivo
+  57  limite_tempo_min limite de tiempo para cada lado
+  58  limite_tempo_max limite de tiempo maximo
+  59  c_una_cado_lado  la canción solo puede estar a un lado
+  60  req_blues requerimientos de musica minimo
+  61  req_rock_a rock and roll para lado a
+  62  cancion1_a si la canción 1 está en el lado a entonces canción 5 no puede estar en a
+  63  cancion2_4 si la canción 2 y 4 estan en lado a entoncces canción 1 está en lado b
+  64  ;
+  65   
+  66  funcionObjetivo(l) ..  z =e= sum((c),x(l,c));
+  67  limite_tempo_min(l)    ..  tiempo_min =l= sum(c, x(l,c)*canciones(c,'p1'))  ;
+  68  limite_tempo_max(l)      .. sum(c, x(l,c)*canciones(c,'p1')) =l= tiempo_max;
+  69  c_una_cado_lado(c)      .. sum (l, x(l,c))=e= 1;
+  70  req_blues(l)            .. sum(c, x(l,c)*canciones(c,'p2')) =e= blues_count;
+  71  req_rock_a               .. sum(c, x('l1',c)*canciones(c,'p3')) =e= min_rr_a;
+  72  cancion1_a               ..1-x('l1','c1')=g= x('l1','c5');
+  73  cancion2_4              .. x('l2','c5')=g= x('l1','c4') + x('l1','c2')-1;
+  74   
+  75  Model model3 /all/ ;
+  76   
+  77  option mip=CPLEX;
+  78  Solve model3 using mip maximizing z;
+  79   
+  80   
+  81  Display x.l;
+  82   
+  83   
+  84   
+      En la solución se puede leer en reading solution form model :
+      l1: Lado A
+      l2: Lado B
+       
+      C1..C8 = canción 1 ... canción 8
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/12/23 13:12:05 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model3 Using MIP From line 78
+
+
+---- funcionObjetivo  =E=  
+
+funcionObjetivo(l1)..  - x(l1,c1) - x(l1,c2) - x(l1,c3) - x(l1,c4) - x(l1,c5) - x(l1,c6) - x(l1,c7) - x(l1,c8) + z =E= 0 ; (LHS = 0)
+     
+funcionObjetivo(l2)..  - x(l2,c1) - x(l2,c2) - x(l2,c3) - x(l2,c4) - x(l2,c5) - x(l2,c6) - x(l2,c7) - x(l2,c8) + z =E= 0 ; (LHS = 0)
+     
+
+---- limite_tempo_min  =L=  limite de tiempo para cada lado
+
+limite_tempo_min(l1)..  - 4*x(l1,c1) - 5*x(l1,c2) - 3*x(l1,c3) - 2*x(l1,c4) - 4*x(l1,c5) - 3*x(l1,c6) - 5*x(l1,c7) - 4*x(l1,c8) =L= -14 ; (LHS = 0, INFES = 14 ****)
+     
+limite_tempo_min(l2)..  - 4*x(l2,c1) - 5*x(l2,c2) - 3*x(l2,c3) - 2*x(l2,c4) - 4*x(l2,c5) - 3*x(l2,c6) - 5*x(l2,c7) - 4*x(l2,c8) =L= -14 ; (LHS = 0, INFES = 14 ****)
+     
+
+---- limite_tempo_max  =L=  limite de tiempo maximo
+
+limite_tempo_max(l1)..  4*x(l1,c1) + 5*x(l1,c2) + 3*x(l1,c3) + 2*x(l1,c4) + 4*x(l1,c5) + 3*x(l1,c6) + 5*x(l1,c7) + 4*x(l1,c8) =L= 16 ; (LHS = 0)
+     
+limite_tempo_max(l2)..  4*x(l2,c1) + 5*x(l2,c2) + 3*x(l2,c3) + 2*x(l2,c4) + 4*x(l2,c5) + 3*x(l2,c6) + 5*x(l2,c7) + 4*x(l2,c8) =L= 16 ; (LHS = 0)
+     
+
+---- c_una_cado_lado  =E=  la canción solo puede estar a un lado
+
+c_una_cado_lado(c1)..  x(l1,c1) + x(l2,c1) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+c_una_cado_lado(c2)..  x(l1,c2) + x(l2,c2) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+c_una_cado_lado(c3)..  x(l1,c3) + x(l2,c3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 5 ENTRIES SKIPPED
+
+
+---- req_blues  =E=  requerimientos de musica minimo
+
+req_blues(l1)..  x(l1,c1) + x(l1,c3) + x(l1,c5) + x(l1,c8) =E= 2 ; (LHS = 0, INFES = 2 ****)
+     
+req_blues(l2)..  x(l2,c1) + x(l2,c3) + x(l2,c5) + x(l2,c8) =E= 2 ; (LHS = 0, INFES = 2 ****)
+     
+
+---- req_rock_a  =E=  rock and roll para lado a
+
+req_rock_a..  x(l1,c2) + x(l1,c4) + x(l1,c6) + x(l1,c8) =E= 3 ; (LHS = 0, INFES = 3 ****)
+     
+
+---- cancion1_a  =G=  si la canción 1 está en el lado a entonces canción 5 no puede estar en a
+
+cancion1_a..  - x(l1,c1) - x(l1,c5) =G= -1 ; (LHS = 0)
+     
+
+---- cancion2_4  =G=  si la canción 2 y 4 estan en lado a entoncces canción 1 está en lado b
+
+cancion2_4..  - x(l1,c2) - x(l1,c4) + x(l2,c5) =G= -1 ; (LHS = 0)
+     
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/12/23 13:12:05 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model3 Using MIP From line 78
+
+
+---- x  
+
+x(l1,c1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcionObjetivo(l1)
+       -4       limite_tempo_min(l1)
+        4       limite_tempo_max(l1)
+        1       c_una_cado_lado(c1)
+        1       req_blues(l1)
+       -1       cancion1_a
+
+x(l1,c2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcionObjetivo(l1)
+       -5       limite_tempo_min(l1)
+        5       limite_tempo_max(l1)
+        1       c_una_cado_lado(c2)
+        1       req_rock_a
+       -1       cancion2_4
+
+x(l1,c3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcionObjetivo(l1)
+       -3       limite_tempo_min(l1)
+        3       limite_tempo_max(l1)
+        1       c_una_cado_lado(c3)
+        1       req_blues(l1)
+
+REMAINING 13 ENTRIES SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcionObjetivo(l1)
+        1       funcionObjetivo(l2)
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/12/23 13:12:05 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE model3 Using MIP From line 78
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 1.600E+01] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 5.000E+00]
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/12/23 13:12:05 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model3 Using MIP From line 78
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           8     SINGLE EQUATIONS           19
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           17
+NON ZERO ELEMENTS            83     DISCRETE VARIABLES         16
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/12/23 13:12:05 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model3 Using MIP From line 78
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model3              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  78
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE                4.0000
+
+ RESOURCE USAGE, LIMIT          0.016 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.02sec (det. 0.07 ticks)
+
+--- Returning a primal only solution to GAMS (marginals all set to NA).
+--- Fixing integer variables and solving final LP...
+
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Proven optimal solution
+MIP Solution:            4.000000    (0 iterations, 0 nodes)
+Final Solve:             4.000000    (0 iterations)
+
+Best possible:           4.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+---- EQU funcionObjetivo  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+l1          .              .              .             1.0000      
+l2          .              .              .              .          
+
+---- EQU limite_tempo_min  limite de tiempo para cada lado
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+l1        -INF          -16.0000       -14.0000          .          
+l2        -INF          -14.0000       -14.0000          .          
+
+---- EQU limite_tempo_max  limite de tiempo maximo
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+l1        -INF           16.0000        16.0000          .          
+l2        -INF           14.0000        16.0000          .          
+
+---- EQU c_una_cado_lado  la canción solo puede estar a un lado
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+c1         1.0000         1.0000         1.0000          .          
+c2         1.0000         1.0000         1.0000          .          
+c3         1.0000         1.0000         1.0000          .          
+c4         1.0000         1.0000         1.0000          .          
+c5         1.0000         1.0000         1.0000          .          
+c6         1.0000         1.0000         1.0000          .          
+c7         1.0000         1.0000         1.0000          .          
+c8         1.0000         1.0000         1.0000          .          
+
+---- EQU req_blues  requerimientos de musica minimo
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+l1         2.0000         2.0000         2.0000          .          
+l2         2.0000         2.0000         2.0000          .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU req_rock_a         3.0000         3.0000         3.0000          .          
+---- EQU cancion1_a        -1.0000        -1.0000        +INF             .          
+---- EQU cancion2_4        -1.0000        -1.0000        +INF             .          
+
+  req_rock_a  rock and roll para lado a
+  cancion1_a  si la canción 1 está en el lado a entonces canción 5 no puede estar en a
+  cancion2_4  si la canción 2 y 4 estan en lado a entoncces canción 1 está en lado b
+
+---- VAR x  
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+l1.c1          .              .             1.0000         1.0000      
+l1.c2          .             1.0000         1.0000         1.0000      
+l1.c3          .              .             1.0000         1.0000      
+l1.c4          .              .             1.0000         1.0000      
+l1.c5          .             1.0000         1.0000         1.0000      
+l1.c6          .             1.0000         1.0000         1.0000      
+l1.c7          .              .             1.0000         1.0000      
+l1.c8          .             1.0000         1.0000         1.0000      
+l2.c1          .             1.0000         1.0000         EPS         
+l2.c2          .              .             1.0000         EPS         
+l2.c3          .             1.0000         1.0000         EPS         
+l2.c4          .             1.0000         1.0000         EPS         
+l2.c5          .              .             1.0000         EPS         
+l2.c6          .              .             1.0000         EPS         
+l2.c7          .             1.0000         1.0000         EPS         
+l2.c8          .              .             1.0000         EPS         
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF            4.0000        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/12/23 13:12:05 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     81 VARIABLE x.L  
+
+            c1          c2          c3          c4          c5          c6          c7          c8
+
+l1                   1.000                               1.000       1.000                   1.000
+l2       1.000                   1.000       1.000                               1.000
+
+
+
+EXECUTION TIME       =        0.172 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+
+
+USER: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL096105
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio3.gms
+Output     C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio3.lst
