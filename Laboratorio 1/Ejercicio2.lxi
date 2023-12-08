@@ -1,0 +1,18 @@
+B 3 C o m p i l a t i o n
+B 51 Equation Listing    SOLVE model2 Using MIP From line 41
+D 54 funcionObjetivo
+D 59 todosTrabajan
+D 70 proy1Trabajador
+B 82 Column Listing      SOLVE model2 Using MIP From line 41
+E 85 x
+E 107 z
+B 115 Range Statistics    SOLVE model2 Using MIP From line 41
+B 126 Model Statistics    SOLVE model2 Using MIP From line 41
+B 139 Solution Report     SOLVE model2 Using MIP From line 41
+F 184 funcionObjetivo
+F 188 todosTrabajan
+F 197 proy1Trabajador
+G 206 x
+G 229 z
+B 239 E x e c u t i o n
+I 241 z

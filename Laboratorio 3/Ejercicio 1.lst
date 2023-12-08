@@ -1,0 +1,347 @@
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/19/23 13:05:43 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1   
+      solo:
+      - Paola Andrea Campiño p.campino
+       
+       
+   8   
+   9   
+  10  sets
+  11   
+  12  t  /t1*t7/
+  13  j jugador /j1*j7/
+  14  l limites /l1*l2/
+  15  v values /v1/
+  16   
+  17   
+  18  ;
+  19  Scalar max_jugador /5/;
+  20   
+  21  Table rol_range(t,l) link cost
+  22      l1  l2
+  23  t5  4   999
+  24  t6  2   999
+  25  t7  1   999;
+  26   
+  27   
+  28  Table promedio (t,v) link cost
+  29      v1
+  30  t1  2
+  31  t2  2
+  32  t3  2
+  33  t4  2;
+  34   
+  35  Table capacidad(j,t) link cost
+  36          t1  t2  t3  t4  t5  t6  t7
+  37  j1      3   3   1   3   0   1   0
+  38  j2      2   1   3   2   0   0   1
+  39  j3      2   3   2   2   1   1   0
+  40  j4      1   3   3   1   1   0   1
+  41  j5      3   3   3   3   1   1   0
+  42  j6      3   1   2   3   1   0   1
+  43  j7      3   2   2   1   1   1   0
+  44  ;
+  45   
+      t1: Control balón
+      t2: disparo
+      t3: rebotes
+      t4: Defensa
+      t5: rol defenza
+      t6: rol ataque
+      t7: rol centro
+       
+  56   
+  57   
+  58  Variables
+  59  x(j)
+  60  z funcion objetivo;
+  61   
+  62   
+  63  Binary Variable x;
+  64  Equations
+  65  funcionObjetivo funcion objetivo
+  66  restriccion1_equ5 jugadores titulares
+  67  minJugadorsRol  minimos jugadores por roles
+  68  promedio_min    minimo promedio x area
+  69  j2_o_j3         si j2 no j3 y si j3 no j2
+  70   
+  71  ;
+  72   
+  73   
+  74  funcionObjetivo ..  z =e= sum((j) ,capacidad(j,'t4')*x(j));
+  75  restriccion1_equ5 .. max_jugador =e= sum(j,x(j));
+  76  minJugadorsRol(t) .. sum(j,x(j)*capacidad(j,t)) =g= rol_range(t,'l1');
+  77  promedio_min(t) .. sum(j,x(j)*capacidad(j,t))/max_jugador =g= promedio(t,'v1');
+  78  j2_o_j3         .. 1-x('j2')=g= x('j3')
+  79   
+  80   
+  81   
+  82   
+  83  Model model2 /all/ ;
+  84   
+  85  option mip=CPLEX;
+  86  Solve model2 using mip maximizing z;
+  87  Display x.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/19/23 13:05:43 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model2 Using MIP From line 86
+
+
+---- funcionObjetivo  =E=  funcion objetivo
+
+funcionObjetivo..  - 3*x(j1) - 2*x(j2) - 2*x(j3) - x(j4) - 3*x(j5) - 3*x(j6) - x(j7) + z =E= 0 ; (LHS = 0)
+     
+
+---- restriccion1_equ5  =E=  jugadores titulares
+
+restriccion1_equ5..  - x(j1) - x(j2) - x(j3) - x(j4) - x(j5) - x(j6) - x(j7) =E= -5 ; (LHS = 0, INFES = 5 ****)
+     
+
+---- minJugadorsRol  =G=  minimos jugadores por roles
+
+minJugadorsRol(t1)..  3*x(j1) + 2*x(j2) + 2*x(j3) + x(j4) + 3*x(j5) + 3*x(j6) + 3*x(j7) =G= 0 ; (LHS = 0)
+     
+minJugadorsRol(t2)..  3*x(j1) + x(j2) + 3*x(j3) + 3*x(j4) + 3*x(j5) + x(j6) + 2*x(j7) =G= 0 ; (LHS = 0)
+     
+minJugadorsRol(t3)..  x(j1) + 3*x(j2) + 2*x(j3) + 3*x(j4) + 3*x(j5) + 2*x(j6) + 2*x(j7) =G= 0 ; (LHS = 0)
+     
+REMAINING 4 ENTRIES SKIPPED
+
+
+---- promedio_min  =G=  minimo promedio x area
+
+promedio_min(t1)..  0.6*x(j1) + 0.4*x(j2) + 0.4*x(j3) + 0.2*x(j4) + 0.6*x(j5) + 0.6*x(j6) + 0.6*x(j7) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+promedio_min(t2)..  0.6*x(j1) + 0.2*x(j2) + 0.6*x(j3) + 0.6*x(j4) + 0.6*x(j5) + 0.2*x(j6) + 0.4*x(j7) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+promedio_min(t3)..  0.2*x(j1) + 0.6*x(j2) + 0.4*x(j3) + 0.6*x(j4) + 0.6*x(j5) + 0.4*x(j6) + 0.4*x(j7) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+REMAINING 4 ENTRIES SKIPPED
+
+
+---- j2_o_j3  =G=  si j2 no j3 y si j3 no j2
+
+j2_o_j3..  - x(j2) - x(j3) =G= -1 ; (LHS = 0)
+     
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/19/23 13:05:43 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model2 Using MIP From line 86
+
+
+---- x  
+
+x(j1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -3       funcionObjetivo
+       -1       restriccion1_equ5
+        3       minJugadorsRol(t1)
+        3       minJugadorsRol(t2)
+        1       minJugadorsRol(t3)
+        3       minJugadorsRol(t4)
+        1       minJugadorsRol(t6)
+        0.6     promedio_min(t1)
+        0.6     promedio_min(t2)
+        0.2     promedio_min(t3)
+        0.6     promedio_min(t4)
+        0.2     promedio_min(t6)
+
+x(j2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -2       funcionObjetivo
+       -1       restriccion1_equ5
+        2       minJugadorsRol(t1)
+        1       minJugadorsRol(t2)
+        3       minJugadorsRol(t3)
+        2       minJugadorsRol(t4)
+        1       minJugadorsRol(t7)
+        0.4     promedio_min(t1)
+        0.2     promedio_min(t2)
+        0.6     promedio_min(t3)
+        0.4     promedio_min(t4)
+        0.2     promedio_min(t7)
+       -1       j2_o_j3
+
+x(j3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -2       funcionObjetivo
+       -1       restriccion1_equ5
+        2       minJugadorsRol(t1)
+        3       minJugadorsRol(t2)
+        2       minJugadorsRol(t3)
+        2       minJugadorsRol(t4)
+        1       minJugadorsRol(t5)
+        1       minJugadorsRol(t6)
+        0.4     promedio_min(t1)
+        0.6     promedio_min(t2)
+        0.4     promedio_min(t3)
+        0.4     promedio_min(t4)
+        0.2     promedio_min(t5)
+        0.2     promedio_min(t6)
+       -1       j2_o_j3
+
+REMAINING 4 ENTRIES SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcionObjetivo
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/19/23 13:05:43 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE model2 Using MIP From line 86
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 5.000E+00] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 2.000E-01, 3.000E+00]
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/19/23 13:05:43 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model2 Using MIP From line 86
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           5     SINGLE EQUATIONS           17
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            8
+NON ZERO ELEMENTS            97     DISCRETE VARIABLES          7
+
+
+GENERATION TIME      =        0.015 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/19/23 13:05:43 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model2 Using MIP From line 86
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model2              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  86
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE               12.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.00sec (det. 0.04 ticks)
+
+--- Returning a primal only solution to GAMS (marginals all set to NA).
+--- Fixing integer variables and solving final LP...
+
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.01 ticks)
+
+
+Proven optimal solution
+MIP Solution:           12.000000    (0 iterations, 0 nodes)
+Final Solve:            12.000000    (0 iterations)
+
+Best possible:          12.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcionOb~          .              .              .             1.0000      
+---- EQU restricci~        -5.0000        -5.0000        -5.0000          .          
+
+  funcionObjetivo  funcion objetivo
+  restriccion1_equ5  jugadores titulares
+
+---- EQU minJugadorsRol  minimos jugadores por roles
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+t1          .            12.0000        +INF             .          
+t2          .            13.0000        +INF             .          
+t3          .            11.0000        +INF             .          
+t4          .            12.0000        +INF             .          
+t5         4.0000         4.0000        +INF             .          
+t6         2.0000         3.0000        +INF             .          
+t7         1.0000         2.0000        +INF             .          
+
+---- EQU promedio_min  minimo promedio x area
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+t1         2.0000         2.4000        +INF             .          
+t2         2.0000         2.6000        +INF             .          
+t3         2.0000         2.2000        +INF             .          
+t4         2.0000         2.4000        +INF             .          
+t5          .             0.8000        +INF             .          
+t6          .             0.6000        +INF             .          
+t7          .             0.4000        +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU j2_o_j3           -1.0000        -1.0000        +INF             .          
+
+  j2_o_j3  si j2 no j3 y si j3 no j2
+
+---- VAR x  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+j1          .             1.0000         1.0000         3.0000      
+j2          .              .             1.0000         2.0000      
+j3          .             1.0000         1.0000         2.0000      
+j4          .             1.0000         1.0000         1.0000      
+j5          .             1.0000         1.0000         3.0000      
+j6          .             1.0000         1.0000         3.0000      
+j7          .              .             1.0000         1.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF           12.0000        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 10/19/23 13:05:43 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     87 VARIABLE x.L  
+
+j1 1.000,    j3 1.000,    j4 1.000,    j5 1.000,    j6 1.000
+
+
+
+EXECUTION TIME       =        0.172 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+
+
+USER: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL096105
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio 1.gms
+Output     C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio 1.lst

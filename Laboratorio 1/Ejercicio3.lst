@@ -1,0 +1,271 @@
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:24 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+       
+      - Paola Andrea Campiño p.campino
+      - Daniel Alfonso Pilimur da.garciap1
+       
+       
+   8   
+   9   
+  10  sets
+  11   
+  12  o origen /o1*o4/
+  13  s suministros /s1/
+  14  d suministros /d1*d4/
+  15   
+  16  ;
+  17   
+  18   
+  19  Table suminis(o,s) link cost
+  20          s1
+  21  o1      300
+  22  o2      500
+  23  o3      200;
+  24   
+  25  Table costos(d,o) link cost
+  26          o1  o2  o3
+  27  d1      8   9   14
+  28  d2      6   12  9
+  29  d3      10  13  16
+  30  d4      9   7   5;
+  31   
+  32  Table destinos(d,s) link cost
+  33          s1
+  34  d1      200
+  35  d2      300
+  36  d3      100
+  37  d4      400;
+  38   
+  39   
+  40   
+  41  Variables
+  42  x(d,o)
+  43  z funcion objetivo;
+  44   
+  45   
+  46  Positive  Variable x;
+  47  Equations
+  48  funcionObjetivo funcion objetivo
+  49  restriccion1
+  50  restriccion2
+  51  ;
+  52   
+  53  funcionObjetivo ..  z =e= sum((d,o),costos(d,o)*x(d,o));
+  54  restriccion1(d)..  sum(o,x(d,o)) =e= destinos(d,'s1');
+  55  restriccion2(o).. sum(d,x(d,o))=l= suminis(o,'s1');
+  56   
+  57   
+  58  Model model1 /all/ ;
+  59   
+  60  option mip=CPLEX;
+  61  Solve model1 using mip minimizing z;
+  62  Display x.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:24 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model1 Using MIP From line 61
+
+
+---- funcionObjetivo  =E=  funcion objetivo
+
+funcionObjetivo..  - 8*x(d1,o1) - 9*x(d1,o2) - 14*x(d1,o3) - 6*x(d2,o1) - 12*x(d2,o2) - 9*x(d2,o3) - 10*x(d3,o1) - 13*x(d3,o2) - 16*x(d3,o3) - 9*x(d4,o1) - 7*x(d4,o2) - 5*x(d4,o3) + z =E= 0 ; (LHS = 0)
+     
+
+---- restriccion1  =E=  
+
+restriccion1(d1)..  x(d1,o1) + x(d1,o2) + x(d1,o3) + x(d1,o4) =E= 200 ; (LHS = 0, INFES = 200 ****)
+     
+restriccion1(d2)..  x(d2,o1) + x(d2,o2) + x(d2,o3) + x(d2,o4) =E= 300 ; (LHS = 0, INFES = 300 ****)
+     
+restriccion1(d3)..  x(d3,o1) + x(d3,o2) + x(d3,o3) + x(d3,o4) =E= 100 ; (LHS = 0, INFES = 100 ****)
+     
+REMAINING ENTRY SKIPPED
+
+
+---- restriccion2  =L=  
+
+restriccion2(o1)..  x(d1,o1) + x(d2,o1) + x(d3,o1) + x(d4,o1) =L= 300 ; (LHS = 0)
+     
+restriccion2(o2)..  x(d1,o2) + x(d2,o2) + x(d3,o2) + x(d4,o2) =L= 500 ; (LHS = 0)
+     
+restriccion2(o3)..  x(d1,o3) + x(d2,o3) + x(d3,o3) + x(d4,o3) =L= 200 ; (LHS = 0)
+     
+REMAINING ENTRY SKIPPED
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:24 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model1 Using MIP From line 61
+
+
+---- x  
+
+x(d1,o1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -8       funcionObjetivo
+        1       restriccion1(d1)
+        1       restriccion2(o1)
+
+x(d1,o2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -9       funcionObjetivo
+        1       restriccion1(d1)
+        1       restriccion2(o2)
+
+x(d1,o3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -14       funcionObjetivo
+        1       restriccion1(d1)
+        1       restriccion2(o3)
+
+REMAINING 13 ENTRIES SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcionObjetivo
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:24 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE model1 Using MIP From line 61
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+02, 5.000E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 1.600E+01]
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:24 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model1 Using MIP From line 61
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            9
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           17
+NON ZERO ELEMENTS            45
+
+
+GENERATION TIME      =        0.078 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:24 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model1 Using MIP From line 61
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model1              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  61
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             7300.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         3    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Optimal solution found
+Objective:         7300.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcionOb~          .              .              .             1.0000      
+
+  funcionObjetivo  funcion objetivo
+
+---- EQU restriccion1  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+d1       200.0000       200.0000       200.0000         9.0000      
+d2       300.0000       300.0000       300.0000         9.0000      
+d3       100.0000       100.0000       100.0000        13.0000      
+d4       400.0000       400.0000       400.0000         7.0000      
+
+---- EQU restriccion2  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+o1        -INF          300.0000       300.0000        -3.0000      
+o2        -INF          500.0000       500.0000          .          
+o3        -INF          200.0000       200.0000        -2.0000      
+o4        -INF             .              .           -13.0000      
+
+---- VAR x  
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+d1.o1          .              .            +INF            2.0000      
+d1.o2          .           200.0000        +INF             .          
+d1.o3          .              .            +INF            7.0000      
+d1.o4          .              .            +INF            4.0000      
+d2.o1          .           300.0000        +INF             .          
+d2.o2          .              .            +INF            3.0000      
+d2.o3          .              .            +INF            2.0000      
+d2.o4          .              .            +INF            4.0000      
+d3.o1          .              .            +INF             .          
+d3.o2          .           100.0000        +INF             .          
+d3.o3          .              .            +INF            5.0000      
+d3.o4          .              .            +INF             .          
+d4.o1          .              .            +INF            5.0000      
+d4.o2          .           200.0000        +INF             .          
+d4.o3          .           200.0000        +INF             .          
+d4.o4          .              .            +INF            6.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF         7300.0000        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/06/23 15:01:24 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     62 VARIABLE x.L  
+
+            o1          o2          o3
+
+d1                 200.000
+d2     300.000
+d3                 100.000
+d4                 200.000     200.000
+
+
+
+EXECUTION TIME       =        0.203 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+
+
+USER: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL096105
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\El supremo\Documents\MOS\Laboratorio 1\Ejercicio3.gms
+Output     C:\Users\El supremo\Documents\MOS\Laboratorio 1\Ejercicio3.lst

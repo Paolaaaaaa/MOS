@@ -1,0 +1,300 @@
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/04/23 08:10:17 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  sets
+   2   
+   3  n dato_nutricional /n1*n6/
+   4  r  rango minimo maximo /r1*r2/
+   5   
+   6   
+   7  c dato_nutricional_producto /c1*c6/
+   8  p  producto /p1*p9/
+   9  ;
+       
+      - Paola Andrea Campiño p.campino
+      - Daniel Alfonso Pilimur da.garciap1
+       
+       
+  17   
+  18  Table datos(n,r) link cost
+  19          r1      r2
+  20  n1      67      9999
+  21  n2      0       50
+  22  n3      0       25
+  23  n4      0       200
+  24  n5      1500   9999;
+  25   
+                      minimo  maximo
+      proteinas       67      9999
+      grasas          0       50
+      azucar          0       25
+      carbohidratos   0       200
+      calorias        1500    9999
+       
+       
+  36   
+  37  Table productos (p,n) link cost
+  38   
+  39   
+  40          n1      n2      n3     n4      n5      n6
+  41  p1      26      19.3    0      0       287      3000
+  42  p2      4.2     0.5     0.01   44.1    204      1000
+  43  p3      8       0.5     13     11      146      600
+  44  p4      6       0.8     25     55      245      700;
+       
+              n1      n2      n3      n4      n5      n6
+      p1      95      0.5     19      0.3     250      1000
+      p2      105     1.3     17.2    0.4     270      800
+      p3      215     4.5     0       1.5     450      1500
+      p4      165     31.2    0       3.6     150      4500
+      p5      150     5.5     9       5.1     170      2000
+      p6      70      6       0.6     4.8     0.6      350
+      p7      83      8.3     12.5    0.2     100      1200
+      p8      206     25      0       13      141      8000
+      p9      55      5.6     1.2     0.5     110      900;
+       
+              Calorías      Proteínas      Azúcar      Grasa      Carbohidratos      Precio
+      Manzana 95            0.5            19          0.3        25                  1000
+      Plátano 105           1.3            17.2        0.4        27                  800
+      Arroz   215           4.5            0           1.5        45                  1500
+      Pollo   165           31.2           0           3.6        0                   4500
+      Yogur   150           5.5            9           5.1        17                  2000
+      Huevo   70            6              0.6         4.8        0.6                 350
+      Leche   83            8.3            12.5        0.2        10                  1200
+      Salmon  206           25             0           13         0                   8000
+      Broccoli55            5.6            1.2         0.5        11                  900
+          
+  72   
+  73  Variables
+  74  x(p)
+  75  z funcion objetivo;
+  76   
+  77  Positive  Variable x;
+  78  Equations
+  79  funcionObjetivo funcion objetivo
+  80  restriccion1
+  81  restriccion2;
+  82   
+  83   
+  84  funcionObjetivo ..  z =e= sum((p),sum(n$(ord(n) eq 6), productos(p,n)*x(p)));
+  85  restriccion1(n)$(ord(n)ne 6) ..  sum(p, productos(p, n) * x(p)) =l= datos(n, 'r2');
+  86   
+  87  restriccion2(n)$(ord(n)ne 6) .. datos(n, 'r1') =l= sum(p, productos(p, n) * x(p));
+  88  Model model1 /all/ ;
+  89   
+  90  option mip=CPLEX;
+  91  Solve model1 using mip minimizing z;
+  92  Display x.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/04/23 08:10:17 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model1 Using MIP From line 91
+
+
+---- funcionObjetivo  =E=  funcion objetivo
+
+funcionObjetivo..  - 3000*x(p1) - 1000*x(p2) - 600*x(p3) - 700*x(p4) + z =E= 0 ; (LHS = 0)
+     
+
+---- restriccion1  =L=  
+
+restriccion1(n1)..  26*x(p1) + 4.2*x(p2) + 8*x(p3) + 6*x(p4) =L= 9999 ; (LHS = 0)
+     
+restriccion1(n2)..  19.3*x(p1) + 0.5*x(p2) + 0.5*x(p3) + 0.8*x(p4) =L= 50 ; (LHS = 0)
+     
+restriccion1(n3)..  0.01*x(p2) + 13*x(p3) + 25*x(p4) =L= 25 ; (LHS = 0)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- restriccion2  =L=  
+
+restriccion2(n1)..  - 26*x(p1) - 4.2*x(p2) - 8*x(p3) - 6*x(p4) =L= -67 ; (LHS = 0, INFES = 67 ****)
+     
+restriccion2(n2)..  - 19.3*x(p1) - 0.5*x(p2) - 0.5*x(p3) - 0.8*x(p4) =L= 0 ; (LHS = 0)
+     
+restriccion2(n3)..  - 0.01*x(p2) - 13*x(p3) - 25*x(p4) =L= 0 ; (LHS = 0)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/04/23 08:10:17 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model1 Using MIP From line 91
+
+
+---- x  
+
+x(p1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+    -3000       funcionObjetivo
+       26       restriccion1(n1)
+       19.3     restriccion1(n2)
+      287       restriccion1(n5)
+      -26       restriccion2(n1)
+      -19.3     restriccion2(n2)
+     -287       restriccion2(n5)
+
+x(p2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+    -1000       funcionObjetivo
+        4.2     restriccion1(n1)
+        0.5     restriccion1(n2)
+        0.01    restriccion1(n3)
+       44.1     restriccion1(n4)
+      204       restriccion1(n5)
+       -4.2     restriccion2(n1)
+       -0.5     restriccion2(n2)
+       -0.01    restriccion2(n3)
+      -44.1     restriccion2(n4)
+     -204       restriccion2(n5)
+
+x(p3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -600       funcionObjetivo
+        8       restriccion1(n1)
+        0.5     restriccion1(n2)
+       13       restriccion1(n3)
+       11       restriccion1(n4)
+      146       restriccion1(n5)
+       -8       restriccion2(n1)
+       -0.5     restriccion2(n2)
+      -13       restriccion2(n3)
+      -11       restriccion2(n4)
+     -146       restriccion2(n5)
+
+REMAINING ENTRY SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcionObjetivo
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/04/23 08:10:17 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE model1 Using MIP From line 91
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 2.500E+01, 9.999E+03] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E-02, 3.000E+03]
+
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/04/23 08:10:17 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model1 Using MIP From line 91
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS           11
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            5
+NON ZERO ELEMENTS            41
+
+
+GENERATION TIME      =        0.062 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/04/23 08:10:17 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model1 Using MIP From line 91
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model1              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  91
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE             9307.9977
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         4    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Optimal solution found
+Objective:         9307.997731
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcionOb~          .              .              .             1.0000      
+
+  funcionObjetivo  funcion objetivo
+
+---- EQU restriccion1  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+n1        -INF           67.9273      9999.0000          .          
+n2        -INF           29.3633        50.0000          .          
+n3        -INF           25.0000        25.0000       -49.5228      
+n4        -INF          200.0000       200.0000       -25.6669      
+n5        -INF         1500.0000      9999.0000          .          
+
+---- EQU restriccion2  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+n1        -INF          -67.9273       -67.0000          .          
+n2        -INF          -29.3633          .              .          
+n3        -INF          -25.0000          .              .          
+n4        -INF         -200.0000          .              .          
+n5        -INF        -1500.0000     -1500.0000       -10.4530      
+
+---- VAR x  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+p1          .             1.3666        +INF             .          
+p2          .             4.0562        +INF             .          
+p3          .             1.9200        +INF             .          
+p4          .              .            +INF          788.7731      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF         9307.9977        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 44.1.1  27c4d1f8 Aug 3, 2023           WEX-WEI x86 64bit/MS Windows - 09/04/23 08:10:17 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     92 VARIABLE x.L  
+
+p1 1.367,    p2 4.056,    p3 1.920
+
+
+
+EXECUTION TIME       =        0.265 SECONDS      4 MB  44.1.1 27c4d1f8 WEX-WEI
+
+
+USER: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL096105
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\El supremo\Documents\MOS\Taller1\taller1.gms
+Output     C:\Users\El supremo\Documents\MOS\Taller1\taller1.lst

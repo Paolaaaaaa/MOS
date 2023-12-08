@@ -1,0 +1,17 @@
+B 3 C o m p i l a t i o n
+B 68 Equation Listing    SOLVE model4 Using MIP From line 51
+D 71 funcionObjetivo
+D 76 todo_tubo
+B 88 Column Listing      SOLVE model4 Using MIP From line 51
+E 91 x
+E 110 z
+B 118 Range Statistics    SOLVE model4 Using MIP From line 51
+B 129 Model Statistics    SOLVE model4 Using MIP From line 51
+B 142 Solution Report     SOLVE model4 Using MIP From line 51
+F 187 funcionObjetivo
+F 189 todo_tubo
+G 201 x
+G 228 z
+B 238 E x e c u t i o n
+I 238 map_tiles
+I 262 x

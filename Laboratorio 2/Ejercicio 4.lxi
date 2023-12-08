@@ -1,0 +1,21 @@
+B 3 C o m p i l a t i o n
+B 101 Equation Listing    SOLVE model4 Using MIP From line 96
+D 104 funcionObjetivo
+D 109 sourceNode
+D 114 destinationNode
+D 119 intermediateNode
+B 131 Column Listing      SOLVE model4 Using MIP From line 96
+E 134 x
+E 154 z
+B 162 Range Statistics    SOLVE model4 Using MIP From line 96
+B 173 Model Statistics    SOLVE model4 Using MIP From line 96
+B 186 Solution Report     SOLVE model4 Using MIP From line 96
+F 231 funcionObjetivo
+F 235 sourceNode
+F 241 destinationNode
+F 247 intermediateNode
+G 257 x
+G 313 z
+B 323 E x e c u t i o n
+I 323 x
+I 332 costos

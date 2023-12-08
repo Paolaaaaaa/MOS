@@ -1,0 +1,38 @@
+
+--- Job Ejercicio 1.gms Start 10/03/23 14:43:11 44.1.1 27c4d1f8 WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\44\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input "C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio 1.gms"
+    PageSize 0
+    ScrDir "C:\Users\El supremo\Documents\MOS\Laboratorio 3\225a\"
+    SysDir C:\GAMS\44\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+          Universidad de los Andes, Colombia                       DL096105
+          C:\Users\El supremo\Documents\GAMS\gamslice.txt
+          p.campino@uniandes.edu.co, Paola Campino                         
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 4 core(s), and 8 thread(s) available
+GAMS 44.1.1   Copyright (C) 1987-2023 GAMS Development. All rights reserved
+--- Starting compilation
+--- Ejercicio 1.gms(36) 3 Mb 1 Error
+*** Error 326 in C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio 1.gms
+    An empty table statement is not followed by a legal statement
+--- Ejercicio 1.gms(79) 3 Mb 2 Errors
+*** Error 257 in C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio 1.gms
+    Solve statement not checked because of previous errors
+--- Ejercicio 1.gms(80) 3 Mb 3 Errors
+*** Error 141 in C:\Users\El supremo\Documents\MOS\Laboratorio 3\Ejercicio 1.gms
+    Symbol declared but no values have been assigned. Check for missing
+       data definition, assignment, data loading or implicit assignment
+       via a solve statement. Suppress with $onImplicitAssign.
+       A wild shot: You may have spurious commas in the explanatory
+       text of a declaration. Check symbol reference list.
+--- Ejercicio 1.gms(80) 3 Mb 3 Errors
+*** Status: Compilation error(s)
+--- Job Ejercicio 1.gms Stop 10/03/23 14:43:11 elapsed 0:00:00.020

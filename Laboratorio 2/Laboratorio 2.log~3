@@ -1,0 +1,137 @@
+
+--- Job Ejercicio 4.gms Start 10/22/23 21:53:45 44.1.1 27c4d1f8 WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\44\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input "C:\Users\El supremo\Documents\MOS\Laboratorio 2\Ejercicio 4.gms"
+    PageSize 0
+    ScrDir "C:\Users\El supremo\Documents\MOS\Laboratorio 2\225a\"
+    SysDir C:\GAMS\44\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Paola Campino            G230808|0002CO-GEN
+          Universidad de los Andes, Colombia                       DL096105
+          C:\Users\El supremo\Documents\GAMS\gamslice.txt
+          p.campino@uniandes.edu.co, Paola Campino                         
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 4 core(s), and 8 thread(s) available
+GAMS 44.1.1   Copyright (C) 1987-2023 GAMS Development. All rights reserved
+--- Starting compilation
+--- Ejercicio 4.gms(98) 3 Mb
+--- Starting execution: elapsed 0:00:00.018
+--- Ejercicio 4.gms(95) 4 Mb
+--- Generating MIP model model4
+--- Ejercicio 4.gms(96) 4 Mb
+---   8 rows  50 columns  124 non-zeroes
+---   49 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 1.000E+00] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 9.999E+03]
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:00.035
+
+IBM ILOG CPLEX   44.1.1 27c4d1f8 Aug 3, 2023           WEI x86 64bit/MS Window
+
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.1.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+Version identifier: 22.1.1.0 | 2022-11-27 | 9160aff4d
+CPXPARAM_Advance                                 0
+CPXPARAM_Simplex_Display                         2
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Generic callback                                 0x50
+Found incumbent of value 19998.000000 after 0.00 sec. (0.00 ticks)
+Tried aggregator 1 time.
+MIP Presolve eliminated 0 rows and 7 columns.
+MIP Presolve added 15 rows and 15 columns.
+Reduced MIP has 22 rows, 58 columns, and 119 nonzeros.
+Reduced MIP has 43 binaries, 15 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.07 ticks)
+Probing time = 0.00 sec. (0.02 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+MIP Presolve eliminated 15 rows and 15 columns.
+MIP Presolve added 15 rows and 15 columns.
+Reduced MIP has 22 rows, 58 columns, and 119 nonzeros.
+Reduced MIP has 43 binaries, 15 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.10 ticks)
+Probing time = 0.00 sec. (0.02 ticks)
+Clique table members: 2.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+LP Presolve eliminated 15 rows and 15 columns.
+Reduced LP has 7 rows, 43 columns, and 74 nonzeros.
+Presolve time = 0.00 sec. (0.02 ticks)
+Initializing dual steep norms . . .
+
+Iteration      Dual Objective            In Variable           Out Variable
+     1              24.309496               x(n7,n5)intermediateNode( artif
+     2              25.514668               x(n7,n1)               x(n4,n5)
+     3              30.630857               x(n7,n2)               x(n4,n1)
+     4              35.057143               x(n7,n6)               x(n4,n2)
+Initializing dual steep norms . . .
+Root relaxation solution time = 0.00 sec. (0.04 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                        19998.0000        0.0000           100.00%
+Found incumbent of value 19998.000000 after 0.02 sec. (0.32 ticks)
+*     0     0      integral     0       35.0571       35.0571        4    0.00%
+Elapsed time = 0.02 sec. (0.33 ticks, tree = 0.00 MB)
+Found incumbent of value 35.057143 after 0.02 sec. (0.33 ticks)
+
+Root node processing (before b&c):
+  Real time             =    0.02 sec. (0.33 ticks)
+Sequential b&c:
+  Real time             =    0.00 sec. (0.00 ticks)
+                          ------------
+Total (root+branch&cut) =    0.02 sec. (0.33 ticks)
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.02sec (det. 0.33 ticks)
+
+--- Returning a primal only solution to GAMS (marginals all set to NA).
+--- Fixing integer variables and solving final LP...
+
+Version identifier: 22.1.1.0 | 2022-11-27 | 9160aff4d
+CPXPARAM_Advance                                 2
+CPXPARAM_Simplex_Display                         2
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Tried aggregator 1 time.
+LP Presolve eliminated 7 rows and 50 columns.
+All rows and columns eliminated.
+Presolve time = 0.00 sec. (0.01 ticks)
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.02 ticks)
+
+
+Proven optimal solution
+MIP Solution:           35.057143    (4 iterations, 0 nodes)
+Final Solve:            35.057143    (0 iterations)
+
+Best possible:          35.057143
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Reading solution for model model4
+--- Executing after solve: elapsed 0:00:00.265
+--- Ejercicio 4.gms(98) 4 Mb
+*** Status: Normal completion
+--- Job Ejercicio 4.gms Stop 10/22/23 21:53:45 elapsed 0:00:00.266

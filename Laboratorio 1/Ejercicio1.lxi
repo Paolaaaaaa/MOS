@@ -1,0 +1,18 @@
+B 3 C o m p i l a t i o n
+B 60 Equation Listing    SOLVE model1 Using MIP From line 44
+D 63 funcionObjetivo
+D 68 peso
+B 74 Column Listing      SOLVE model1 Using MIP From line 44
+E 77 x
+E 96 z
+B 104 Range Statistics    SOLVE model1 Using MIP From line 44
+B 115 Model Statistics    SOLVE model1 Using MIP From line 44
+B 128 Solution Report     SOLVE model1 Using MIP From line 44
+F 173 funcionObjetivo
+F 174 peso
+G 179 x
+G 191 z
+B 201 E x e c u t i o n
+I 201 x
+I 208 peso
+I 210 z
